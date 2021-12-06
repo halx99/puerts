@@ -148,10 +148,10 @@ namespace puerts
             v8::V8::InitializePlatform(GPlatform.get());
             v8::V8::Initialize();
         }
-#if PLATFORM_IOS
+// #if PLATFORM_IOS
         std::string Flags = "--jitless --no-expose-wasm";
         v8::V8::SetFlagsFromString(Flags.c_str(), static_cast<int>(Flags.size()));
-#endif
+// #endif
 
         v8::StartupData SnapshotBlob;
         SnapshotBlob.data = (const char *)SnapshotBlobCode;
