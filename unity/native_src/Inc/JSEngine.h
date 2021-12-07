@@ -110,9 +110,9 @@ class JSEngine
 {
 private: 
     void JSEngineWithNode();
-    void JSEngineWithoutNode(void* external_quickjs_runtime, void* external_quickjs_context);
+    void JSEngineWithoutNode(void* external_quickjs_runtime, void* external_quickjs_context, bool jitless);
 public:
-    PUERTS_EXPORT_FOR_UT JSEngine(void* external_quickjs_runtime, void* external_quickjs_context);
+    PUERTS_EXPORT_FOR_UT JSEngine(void* external_quickjs_runtime, void* external_quickjs_context, bool jitless);
 
     PUERTS_EXPORT_FOR_UT ~JSEngine();
 

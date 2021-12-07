@@ -140,7 +140,7 @@ namespace puerts
 #endif        
 
 #if !WITH_NODEJS
-    void JSEngine::JSEngineWithoutNode(void* external_quickjs_runtime, void* external_quickjs_context)
+    void JSEngine::JSEngineWithoutNode(void* external_quickjs_runtime, void* external_quickjs_context, bool jitless)
     {
         if (!GPlatform)
         {
@@ -148,10 +148,15 @@ namespace puerts
             v8::V8::InitializePlatform(GPlatform.get());
             v8::V8::Initialize();
         }
-// #if PLATFORM_IOS AUTO TRIGGER CI
-        std::string Flags = "--jitless --no-expose-wasm";
-        v8::V8::SetFlagsFromString(Flags.c_str(), static_cast<int>(Flags.size()));
-// #endif
+#if defined(PLATFORM_IOS)
+        const bool AllowExecOnHeap = false;
+#else
+        const bool AllowExecOnHeap = true;
+#endif
+        if(!AllowExecOnHeap || jitless) {
+            std::string Flags = "--jitless --no-expose-wasm";
+            v8::V8::SetFlagsFromString(Flags.c_str(), static_cast<int>(Flags.size()));
+        }
 
         v8::StartupData SnapshotBlob;
         SnapshotBlob.data = (const char *)SnapshotBlobCode;
@@ -191,14 +196,14 @@ namespace puerts
     }
 #endif
 
-    JSEngine::JSEngine(void* external_quickjs_runtime, void* external_quickjs_context)
+    JSEngine::JSEngine(void* external_quickjs_runtime, void* external_quickjs_context, bool jitless)
     {
         GeneralDestructor = nullptr;
         Inspector = nullptr;
 #if WITH_NODEJS
         JSEngineWithNode();
 #else
-        JSEngineWithoutNode(external_quickjs_runtime, external_quickjs_context);
+        JSEngineWithoutNode(external_quickjs_runtime, external_quickjs_context, jitless);
 #endif
     }
 

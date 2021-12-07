@@ -38,7 +38,7 @@ V8_EXPORT int GetLibBackend()
 #endif
 }
 
-V8_EXPORT v8::Isolate *CreateJSEngine()
+V8_EXPORT v8::Isolate *CreateJSEngine(bool jitless)
 {
     auto JsEngine = new JSEngine(nullptr, nullptr);
     return JsEngine->MainIsolate;
