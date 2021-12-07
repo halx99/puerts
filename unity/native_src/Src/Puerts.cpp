@@ -40,14 +40,14 @@ V8_EXPORT int GetLibBackend()
 
 V8_EXPORT v8::Isolate *CreateJSEngine(bool jitless)
 {
-    auto JsEngine = new JSEngine(nullptr, nullptr);
+    auto JsEngine = new JSEngine(nullptr, nullptr, jitless);
     return JsEngine->MainIsolate;
 }
 
 V8_EXPORT v8::Isolate *CreateJSEngineWithExternalEnv(void* external_quickjs_runtime, void* external_quickjs_context)
 {
 #if WITH_QUICKJS
-    auto JsEngine = new JSEngine(external_quickjs_runtime, external_quickjs_context);
+    auto JsEngine = new JSEngine(external_quickjs_runtime, external_quickjs_context, false);
     return JsEngine->MainIsolate;
 #else
     return nullptr;
